@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en-US" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Product Management Page</title>
+    <th:block layout:fragment="headerfiles">
+        <!-- Toastr -->
+        <link rel="stylesheet" th:href="@{/LTE/plugins/toastr/toastr.min.css}"/>
+    </th:block>
+</head>
+<body>
+<!-- Content Wrapper. Contains page content -->
+<div layout:fragment="content" class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Product Management</h1>
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a th:href="@{/home}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Product Management</li>
+                    </ol>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Main row -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <a href="/products/create" class="btn btn-primary"> <i
+                                    class="fas fa-user-plus ml-2"> Create</i>
+                            </a>
+                            <button type="button"
+                                    class="btn btn-xs btn-block btn-warning" data-toggle="modal"
+                                    data-target="#modal-warning"
+                                    style="width: 100px; text-transform: uppercase; float: left; margin-left: 15px;"
+                                    th:styleappend="${errors == null} ? 'display: none;' : 'display:block;'">
+                                <i class="fas fa-bell"></i>&nbsp;&nbsp;Error Found
+                            </button>
+                            <div class="card-tools">
+                                <form method="POST" th:action="@{/products}">
+                                    <div class="input-group input-group-sm" style="width: 150px;">
+                                        <input type="text" name="table_search" id="searchValue"
+                                               th:value="*{searchValue}" class="form-control float-right"
+                                               placeholder="Search">
+
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-default">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered table-hover table-striped"
+                                   style="text-align: center">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Image</th>
+                                    <th>Description</th>
+                                    <th>Price</th>
+                                    <th>Category</th>
+                                    <th>Created at</th>
+                                    <th>Updated at</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="product : ${data}">
+                                    <td th:text="${product.id}"></td>
+                                    <td th:text="${product.name}"></td>
+                                    <td>
+                                        <img th:src="*{product.image}"
+                                             style="width: 100px; height: 70px"/>
+                                    </td>
+                                    <td th:text="${product.description}"></td>
+                                    <td th:text="${product.price}"></td>
+                                    <td>
+                                        <th:block th:each="pc : ${product.categoryDTOList}">
+                                            <p th:text="${pc.name}"></p>
+                                        </th:block>
+                                    </td>
+                                    <td
+                                            th:text="${#dates.format(product.createdAt, 'dd/MM/yyyy hh:mm a')}"></td>
+                                    <td
+                                            th:text="${#dates.format(product.updatedAt, 'dd/MM/yyyy hh:mm a')}"></td>
+                                    <td class="project-actions text-right">
+                                        <a class="btn btn-primary btn-sm"
+                                           th:href="@{/products/{id}(id=${product.id})}"> <i
+                                                class="fas fa-eye"></i>&nbsp;&nbsp;View</a>
+                                        <a class="btn btn-info btn-sm"
+                                           th:href="@{/products/edit/{id}(id=${product.id})}"> <i
+                                                class="fas fa-pencil-alt"></i>&nbsp;&nbsp;Edit </a>
+                                        <a class="btn btn-danger btn-sm"
+                                           onclick="return confirm('Are you sure?');"
+                                           th:href="@{/products/delete/{id}(id=${product.id})}">
+                                            <i class="fas fa-trash-alt"></i>&nbsp;&nbsp;Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer clearfix">
+                            <ul th:if="${data.totalPages > 0}"
+                                class="pagination pagination-sm m-0 float-right">
+                                <li class="page-item"
+                                    th:classappend="${currentPage}>0?'':'disabled'"><a
+                                        class="page-link" th:with="preIndex=${currentPage - 1}"
+                                        th:href="@{/products(searchValue=${searchValue},pageNo=${preIndex}<0?0:${preIndex})}">&laquo;</a>
+                                </li>
+                                <li class="page-item"
+                                    th:each="i : ${#numbers.sequence(0, data.totalPages-1)}"
+                                    th:classappend="${currentPage}==${i}?'active':''"><a
+                                        class="page-link" th:with="currentIndex=${i+1}"
+                                        th:text="${currentIndex}"
+                                        th:href="@{/products(searchValue=${searchValue},pageNo=${i})}"></a>
+                                </li>
+                                <li class="page-item"
+                                    th:classappend="${currentPage}<${data.totalPages}-1?'':'disabled'"><a
+                                        class="page-link" th:with="postIndex=${currentPage + 1}"
+                                        th:href="@{/products(searchValue=${searchValue},pageNo=${postIndex}>=${data.totalPages}?(${data.totalPages-1}):${postIndex})}">&raquo;</a>
+                                </li>
+                            </ul>
+                            <ul th:unless="${data.totalPages > 0}"
+                                class="pagination pagination-sm m-0 float-right">
+                                <li class="page-item" th:classappend="disabled"><a
+                                        class="page-link" th:with="preIndex=${currentPage - 1}"
+                                        href="#">&laquo;</a></li>
+                                <li class="page-item" th:classappend="'active'"><a
+                                        class="page-link" th:text="1"
+                                        th:href="@{/products(searchValue=${searchValue},pageNo=${i})}"></a>
+                                </li>
+                                <li class="page-item" th:classappend="disabled"><a
+                                        class="page-link" th:with="postIndex=${currentPage + 1}"
+                                        href="#">&raquo;</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+                <!-- /.row (main row) -->
+            </div>
+            <!-- /.container-fluid -->
+
+            <div class="modal fade" id="modal-danger">
+                <div class="modal-dialog">
+                    <div class="modal-content bg-danger">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Danger Modal</h4>
+                            <button type="button" class="close" data-dismiss="modal"
+                                    aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to block this customer?</p>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <form id="lockForm" action="#" method="POST">
+                                <input type="hidden" name="block-id"/>
+                                <button type="submit" class="btn btn-outline-light">Save
+                                    changes
+                                </button>
+                            </form>
+                            <button type="button" class="btn btn-outline-light"
+                                    data-dismiss="modal">Close
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+
+            <div class="modal fade" id="modal-success">
+                <div class="modal-dialog">
+                    <div class="modal-content bg-success">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Success Modal</h4>
+                            <button type="button" class="close" data-dismiss="modal"
+                                    aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to unblock this customer?</p>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <form id="unlockForm" action="#" method="POST">
+                                <input type="hidden" name="unblock-id"/>
+                                <button type="submit" class="btn btn-outline-light">Save
+                                    changes
+                                </button>
+                            </form>
+                            <button type="button" class="btn btn-outline-light"
+                                    data-dismiss="modal">Close
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+
+            <div class="modal fade" id="modal-warning">
+                <div class="modal-dialog">
+                    <div class="modal-content bg-warning">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Success Modal</h4>
+                            <button type="button" class="close" data-dismiss="modal"
+                                    aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" th:each="error, iterator:${errors}">
+                            <p style="color: red" th:text="${iterator.index} + '. ' + ${error}"></p>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-outline-light"
+                                    data-dismiss="modal">Close
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+        </div>
+    </section>
+    <!-- /.content -->
+    <script th:src="@{/LTE/plugins/jquery/jquery.min.js}"></script>
+    <script>
+        $(document).ready(function () {
+            if (document.location.href.indexOf("error") > 0) {
+                alert("Product in order , cannot delete")
+            }
+        });
+
+    </script>
+</div>
+<!-- /.content-wrapper -->
+
+<th:block layout:fragment="script"></th:block>
+
+
+</body>
+</html>

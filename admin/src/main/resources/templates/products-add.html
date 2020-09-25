@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Test Page</title>
+    <th:block layout:fragment="headerfiles"></th:block>
+</head>
+
+<body>
+<div layout:fragment="content" class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Create Products</h1>
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/home}">Dashboard</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/categories}">Products Management</a>
+                        </li>
+                        <li class="breadcrumb-item active">Add Category</li>
+                    </ol>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+        <!-- Main row -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Add Products</h3>
+                    </div>
+                    <!-- <h1 th:text="${error}"></h1>-->
+                    <form method="POST" th:action="@{/products/create}" th:object="${productDTO}">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" class="form-control" th:field="*{name}">
+                                <span th:if="${#fields.hasErrors('name')}" style="color: red" th:errors="*{name}">Description Error</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea id="description" th:field="*{description}" class="form-control"
+                                          rows="4">
+                                </textarea>
+                                <span th:if="${#fields.hasErrors('description')}" style="color: red"
+                                      th:errors="*{description}">Description Error
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Price</label>
+                                <textarea id="price" th:field="*{price}" class="form-control" rows="4">
+                                </textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="image">Product image</label>
+                                <div class="custom-file" id="image-url">
+                                    <img id="image" src="" style="heignt:180px; width:180px;">
+                                    <input id="real" name="real" type="file" onchange="changeimg(event)"
+                                           accept=".png, .jpg,.jpeg" style="color: white; cursor: pointer;"/>
+                                    <input type="text" th:field="*{image}" id="imagevalue" hidden="hidden">
+                                </div>
+                                <span th:if="${#fields.hasErrors('image')}" style="color: red"
+                                      th:errors="*{image}">Description Error
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label>Select categories</label>
+                                <!--<th:block th:field="*{categoryEntities}">-->
+                                <select class="form-control" th:field="*{categoryIds}" multiple="multiple">
+                                    <option th:each="category : ${categoryDTOList}"
+                                            th:value="${category.id}"
+                                            th:text="${category.name}">
+                                    </option>
+                                </select>
+                                <span th:if="${#fields.hasErrors('categoryIds')}" style="color: red"
+                                      th:errors="*{categoryIds}">Description Error
+                                </span>
+                                <!-- </th:block>-->
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <a href="/products" class="btn btn-secondary float-left">Cancel</a>
+                            <input type="submit" value="Confirm" class="btn btn-success float-left"
+                                   style="margin-left: 20px">
+                        </div>
+                    </form>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+        <!-- /.row (main row) -->
+
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+<th:block layout:fragment="script">
+    <script>
+        function changeimg(evt) {
+            evt.stopPropagation();
+            evt.preventDefault();
+            var files = evt.target.files;
+            var file = files[0];
+            var fileReader = new FileReader();
+            fileReader.onload = function (progressEvent) {
+                var url = fileReader.result;
+                var myImg = document.getElementById("image");
+                myImg.src = url;
+            }
+            fileReader.readAsDataURL(file);
+            addImage();
+        }
+
+        function addImage() {
+            var fd = new FormData();
+            var files = $('#real')[0].files[0];
+            fd.append('fileup', files);
+            $.ajax({
+                url: '/image',
+                type: 'post',
+                data: fd,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    $('#imagevalue').val(response);
+                    //$("#sourceimage").val(response);
+                    alert("Upload successfully ", "", {timeOut: 2000});
+
+                },
+                error: function (error) {
+                    console.log(error)
+                    alert("Upload failed , please check your network", "", {timeOut: 2000});
+                }
+            });
+        }
+    </script>
+</th:block>
+
+</body>
+
+</html>

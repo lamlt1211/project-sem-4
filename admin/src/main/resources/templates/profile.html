@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Test Page</title>
+    <th:block layout:fragment="headerfiles">
+        <style>
+            table, th, td {
+                border: 1px solid rgba(6, 4, 19, 0.09);
+                border-collapse: collapse;
+            }
+
+            th, td {
+                padding: 5px;
+                text-align: left;
+            }
+
+            th {
+                width: 300px;
+            }
+        </style>
+    </th:block>
+</head>
+<body>
+<!-- Content Wrapper. Contains page content -->
+<div layout:fragment="content" class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <!-- /.col -->
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="ftco-section">
+        <div class="container">
+            <div class="col-md-12 heading-section text-center ftco-animate fadeInUp ftco-animated">
+                <h2 class="mb-4">My Profile</h2>
+            </div>
+            <form class="bg-white p-5 contact-form" method="POST" th:action="@{/profile}" th:object="${users}">
+                <input th:field="${users.id}" type="hidden">
+                <div class="form-group">
+                    <input class="form-control" th:field="${users.userName}" name="userName" type="text" readonly>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" th:field="${users.fullName}" name="fullName" type="text">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" th:field="${users.email}" name="email" type="email" readonly>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" th:field="${users.address}" name="address" type="text">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" th:field="${users.phone}" name="phone" type="text">
+                </div>
+
+                <input type="hidden" th:field="${users.password}">
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Update">
+                </div>
+            </form>
+
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+<th:block layout:fragment="script"></th:block>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Test Page</title>
+    <th:block layout:fragment="headerfiles">
+        <style>
+            table, th, td {
+                border: 1px solid rgba(6, 4, 19, 0.09);
+                border-collapse: collapse;
+            }
+
+            th, td {
+                padding: 5px;
+                text-align: left;
+            }
+
+            th {
+                width: 300px;
+            }
+        </style>
+    </th:block>
+</head>
+<body>
+<!-- Content Wrapper. Contains page content -->
+<div layout:fragment="content" class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">User detail</h1>
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a th:href="@{/home}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/users}">User
+                            Management</a></li>
+                        <li class="breadcrumb-item active">User Detail</li>
+                    </ol>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+        <!-- Main row -->
+        <div class="row">
+            <div class="col-md-12" style="align-items: baseline">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">User detail</h3>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <th>UserName</th>
+                            <td><p th:text="${users.userName}"></p></td>
+                        </tr>
+                        <tr>
+                            <th>FullName</th>
+                            <td><p th:text="${users.fullName}"></p></td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td><p th:text="${users.email}"></p></td>
+                        </tr>
+                        <tr>
+                            <th>Address</th>
+                            <td><p th:text="${users.address}"></p></td>
+                        </tr>
+                        <tr>
+                            <th>Phone</th>
+                            <td><p th:text="${users.phone}"></p></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-12">
+                    <a href="/users" class="btn btn-secondary">Back</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+<th:block layout:fragment="script"></th:block>
+</body>
+</html>

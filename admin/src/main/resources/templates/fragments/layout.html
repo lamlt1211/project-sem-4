@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>Layout Page</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/LTE/plugins/fontawesome-free/css/all.min.css}"/>
+    <!-- Ionicons -->
+    <link rel="stylesheet"
+          href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"/>
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/LTE/dist/css/adminlte.min.css}"/>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700"/>
+    <th:block layout:fragment="headerfiles"></th:block>
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+    <!-- header -->
+    <nav th:replace="fragments/header :: header"></nav>
+    <!-- side bar -->
+    <aside th:replace="fragments/sidebar :: sidebar"></aside>
+    <!-- content -->
+    <div layout:fragment="content"></div>
+    <!-- footer -->
+    <footer th:replace="fragments/footer :: footer"></footer>
+</div>
+
+<!-- jQuery -->
+<script th:src="@{/LTE/plugins/jquery/jquery.min.js}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script th:src="@{/LTE/plugins/jquery-ui/jquery-ui.min.js}"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+    $.widget.bridge('uibutton', $.ui.button)
+</script>
+<!-- Bootstrap 4 -->
+<script
+        th:src="@{/LTE/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- AdminLTE App -->
+<script th:src="@{/LTE/dist/js/adminlte.js}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var state = localStorage.getItem('link-index');
+        if (state) {
+            $('[data-link-index=' + state + ']').addClass('active');
+        } else {
+            $('[data-link-index=0]').addClass('active');
+        }
+
+        $('.nav-link').on('click', function (e) {
+            clearSidebarActive();
+            localStorage.setItem('link-index', $(this).attr('data-link-index'));
+        });
+
+        function clearSidebarActive() {
+            $('.nav-link').each(function (e) {
+                $(this).removeClass('active');
+            });
+        }
+    });
+</script>
+<th:block layout:fragment="script"></th:block>
+</body>
+</html>

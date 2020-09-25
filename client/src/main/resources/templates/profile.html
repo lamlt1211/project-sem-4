@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en">
+<head>
+    <title>Vegefoods - Free Bootstrap 4 Template by Colorlib</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <th:block th:include="layout/web-header"/>
+    <style>
+        .alert {
+            padding: 20px;
+            background-color: #f44336;
+            color: white;
+        }
+
+        .closebtn {
+            margin-left: 15px;
+            color: white;
+            font-weight: bold;
+            float: right;
+            font-size: 22px;
+            line-height: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .closebtn:hover {
+            color: black;
+        }
+    </style>
+</head>
+<body class="goto-here">
+<th:block th:include="layout/wed-menu"/>
+
+<div class="hero-wrap hero-bread" th:style="'background-image: url(' + @{../images/bg_3.jpg}+ ');'">
+
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs"><span class="mr-2"></span>
+                    <span style="color: #000000">Your profile</span>
+                </p>
+                <h1 class="mb-0 bread" style="color: #000000">Profile</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="col-md-12 heading-section text-center ftco-animate fadeInUp ftco-animated">
+            <h2 class="mb-4">My Profile</h2>
+        </div>
+        <div class="testimony-wrap p-4 pb-5">
+            <div class="user-img mb-5" style="background-image: url(images/person_1.jpg)">
+                    <span class="quote d-flex align-items-center justify-content-center">
+                      <i class="icon-quote-left"></i>
+                    </span>
+            </div>
+            <div class="text text-center" th:object="${users}">
+                <p class="name" th:text="${users.fullName}"></p>
+                <span class="position"></span>
+            </div>
+        </div>
+
+        <form class="bg-white p-5 contact-form" method="POST" th:action="@{/profile}" th:object="${users}">
+            <input th:field="${users.id}" type="hidden">
+            <div class="form-group">
+                <input class="form-control" th:field="${users.userName}" name="userName" type="text" readonly>
+            </div>
+            <div class="form-group">
+                <input class="form-control" th:field="${users.fullName}" name="fullName" type="text">
+            </div>
+            <div class="form-group">
+                <input class="form-control" th:field="${users.email}" name="email" type="email" readonly>
+            </div>
+            <div class="form-group">
+                <input class="form-control" th:field="${users.address}" name="address" type="text">
+            </div>
+            <div class="form-group">
+                <input class="form-control" th:field="${users.phone}" name="phone" type="text">
+            </div>
+
+            <input type="hidden" th:field="${users.password}">
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Update">
+            </div>
+        </form>
+
+    </div>
+</section>
+<th:block th:include="layout/web-footer"/>
+<script>
+    $(document).ready(function () {
+
+    });
+</script>
+</body>
+</html>

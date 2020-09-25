@@ -1,0 +1,107 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+    <div class="py-1 bg-primary">
+        <div class="container">
+            <div
+                    class="row no-gutters d-flex align-items-start align-items-center px-md-0">
+                <div class="col-lg-12 d-block">
+                    <div class="row d-flex">
+                        <div class="col-md pr-4 d-flex topper align-items-center">
+                            <div
+                                    class="icon mr-2 d-flex justify-content-center align-items-center">
+                                <span class="icon-phone2"></span>
+                            </div>
+                            <span class="text">+ 1235 2355 98</span>
+                        </div>
+                        <div class="col-md pr-4 d-flex topper align-items-center">
+                            <div th:data-username="${#authentication.getPrincipal() != 'anonymousUser'} ?${#authentication.getPrincipal().getUsername()} : '0'"
+                                 class="icon mr-2 d-flex justify-content-center align-items-center username">
+                                <span class="icon-paper-plane"></span>
+                            </div>
+                            <span class="text"
+                                  th:text="${#authentication.getPrincipal() != 'anonymousUser'} ? ${#authentication.getPrincipal().getFullname()} : 'Guest'">
+                                your
+                                name
+                            </span>
+                        </div>
+                        <div
+                                class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right">
+                            <span class="text">3-5 Business days delivery &amp; Free
+                                Returns
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav
+            class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light"
+            id="ftco-navbar">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/home}">Vegefoods</a>
+            <button aria-controls="ftco-nav" aria-expanded="false"
+                    aria-label="Toggle navigation" class="navbar-toggler"
+                    data-target="#ftco-nav" data-toggle="collapse" type="button">
+                <span class="oi oi-menu"></span>
+                Menu
+            </button>
+
+            <div class="collapse navbar-collapse" id="ftco-nav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" th:href="@{/home}">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" th:href="@{/shop}">Shop</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" th:href="@{/cart}">Cart</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" th:href="@{/about}">About</a>
+                    </li>
+                    <li th:if="${#authentication.getPrincipal() == 'anonymousUser'}" class="nav-item dropdown">
+                        <a aria-expanded="false"
+                           aria-haspopup="true" class="nav-link dropdown-toggle"
+                           data-toggle="dropdown" href="#" id="dropdown05">
+                            <span class="text"
+                                  th:text="${#authentication.getPrincipal() != 'anonymousUser'} ? 'Welcome, '+${#authentication.getPrincipal().getUsername()} : 'Welcome'">
+                                your
+                                name
+                            </span>
+                        </a>
+                        <div aria-labelledby="dropdown04" class="dropdown-menu">
+                            <a
+                                    class="dropdown-item" href="/login">Login
+                            </a>
+                            <a
+                                    class="dropdown-item" href="/signup">Signup
+                            </a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown" th:unless="${#authentication.getPrincipal() == 'anonymousUser'}">
+                        <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
+                           data-toggle="dropdown" href="#" id="dropdown06">
+                            <span class="text"
+                                  th:text="${#authentication.getPrincipal() != 'anonymousUser'} ? 'Welcome, '+${#authentication.getPrincipal().getUsername()} : 'Welcome, Guest'"></span>
+                        </a>
+                        <div aria-labelledby="dropdown04" class="dropdown-menu">
+                            <a class="dropdown-item" href="/profile">Profile</a>
+                            <a class="dropdown-item" th:href="@{/order(username=${#authentication.getPrincipal().getUsername()})}">Order Me!</a>
+                            <a
+                                    class="dropdown-item" href="/logout">Logout
+                            </a>
+                            <a
+                                    class="dropdown-item" href="/change-password">Change Password
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item cta cta-colored">
+                        <a class="nav-link" href="/cart">
+                            <span class="icon-shopping_cart " >
+                            </span><span class="sizeCart" th:data-size="${sizeCart}">[<th:block th:text="${sizeCart}!=null?${sizeCart}:0"/>]</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>

@@ -1,0 +1,59 @@
+<!-- Main Sidebar Container -->
+<aside th:fragment="sidebar"
+       class="main-sidebar sidebar-dark-primary elevation-4" xmlns:th="http://www.w3.org/1999/xhtml">
+    <!-- Brand Logo -->
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img th:src="@{/LTE/dist/img/user2-160x160.jpg}" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <a th:href="@{/home}" class="d-block"
+                   th:text="${#request.userPrincipal.principal.fullname != null} ? ${#request.userPrincipal.principal.fullname} : 'NOT FOUND'"></a>
+            </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column nav-legacy nav-child-indent"
+                data-widget="treeview" role="menu" data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+                <li class="nav-item">
+                    <a th:href="@{/home}" class="nav-link" data-link-index="0"> <i
+                            class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/users}" class="nav-link" data-link-index="1">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>User</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/categories}" class="nav-link" data-link-index="2">
+                        <i class="fab fa-cuttlefish"></i>
+                        <p>Categories</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/products}" class="nav-link" data-link-index="3"> <i class="fab fa-product-hunt"></i>
+                        <p>Products</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/orders}" class="nav-link" data-link-index="4">
+                        <i class="fas fa-cart-plus"></i>
+                        <p>Orders</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>

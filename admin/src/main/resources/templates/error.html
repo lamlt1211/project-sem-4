@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en-US" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Error Page</title>
+    <th:block layout:fragment="headerfiles"></th:block>
+</head>
+<body>
+<!-- Content Wrapper. Contains page content -->
+<div layout:fragment="content" class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Error Page</h1>
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right" th:switch="${status}">
+                        <li class="breadcrumb-item active" th:case="500">500 Error
+                            Page</li>
+                        <li class="breadcrumb-item active" th:case="404">404 Error
+                            Page</li>
+                        <li class="breadcrumb-item active" th:case="403">403 Error
+                            Page</li>
+                        <li class="breadcrumb-item active" th:case="*">Unknown Error
+                            Page</li>
+                    </ol>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="error-page">
+            <h2 class="headline text-danger" th:text="${status}"></h2>
+
+            <div class="error-content" th:switch="${status}">
+                <h3 th:inline="text">
+                    <i class="fas fa-exclamation-triangle text-danger"></i> [[${message}]]
+                </h3>
+
+                <p th:case="500">
+                    We will work on fixing that right away. Meanwhile, you may <a
+                        href="@{/logout}">return to login</a>.
+                </p>
+                <p th:case="404">
+                    Retry again or maybe this page already not exists, you can <a
+                        th:href="@{/home}">return to dashboard</a>.
+                </p>
+                <p th:case="403">
+                    <a th:href="@{/logout}">Return to login</a> and retry login with
+                    another that have require permission.
+                </p>
+                <p th:case="*">Something went wrong.</p>
+            </div>
+        </div>
+        <!-- /.error-page -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+<th:block layout:fragment="script"></th:block>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Vegefoods</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <th:block th:include="layout/web-header"/>
+</head>
+<body class="goto-here">
+<th:block th:include="layout/wed-menu"/>
+
+<section class="hero" id="home-section">
+    <div class="home-slider owl-carousel">
+        <div class="slider-item" th:style="'background-image:url('+ @{/images/bg_1.jpg} +');'">
+            <div class="overlay"></div>
+            <div class="container">
+                <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
+
+                    <div class="col-md-12 ftco-animate text-center">
+                        <h1 class="mb-2">We serve Fresh Vegestables &amp; Fruits</h1>
+                        <h2 class="subheading mb-4">We deliver organic vegetables &amp; fruits</h2>
+                        <p><a class="btn btn-primary" th:href="@{/shop}">View Details</a></p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="slider-item" th:style="'background-image:url('+ @{/images/bg_2.jpg} + ');'">
+            <div class="overlay"></div>
+            <div class="container">
+                <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
+                    <div class="col-sm-12 ftco-animate text-center">
+                        <h1 class="mb-2">100% Fresh &amp; Organic Foods</h1>
+                        <h2 class="subheading mb-4">We deliver organic vegetables &amp; fruits</h2>
+                        <p><a class="btn btn-primary" href="#">View Details</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center mb-3 pb-3">
+            <div class="col-md-12 heading-section text-center ftco-animate">
+                <span class="subheading">All Products</span>
+                <h2 class="mb-4">All Product</h2>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <th:block th:if="${listProducts != null}">
+                <div class="col-md-6 col-lg-3"
+                     th:each="product : ${listProducts}">
+                    <div class="product">
+                        <a href="#" th:href="@{/detail/{id}(id=${product.id})}" class="img-prod">
+                            <img class="img-fluid" th:src="@{${product.image}}" style="height: 200px; width: auto"
+                                 alt="Colorlib Template">
+                        </a>
+                        <div class="text py-3 pb-4 px-3 text-center">
+                            <h3>
+                                <a href="#"><p th:text="${product.name}"></p></a>
+                                <p class="price">
+                                    <span class="price-sale"><a th:text="${product.price}"></a></span>
+                                </p>
+                            </h3>
+
+                            <div class="bottom-area d-flex px-3">
+                                <div class="m-auto d-flex">
+                                    <a id="coom" href="" th:data-id="${product.id}"
+                                       class="add-to-cartInfo d-flex justify-content-center align-items-center text-center add">
+                                        <span><i class="ion-ios-menu"></i></span>
+                                    </a>
+                                    <a th:href="@{/detail/{id}(id=${product.id})}"
+                                       class="buy-now d-flex justify-content-center align-items-center mx-1">
+                                    <span>
+                                        <i class="ion-ios-heart"></i>
+                                    </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+        <div class="col text-center">
+            <div class="block-27">
+                <ul>
+                    <li>
+                        <span th:if="${pages.isLast()}"> <a
+                                th:href="@{/home(page=${pages.page -1},size=${pages.size})}">&lt;</a>
+						</span>
+                    </li>
+                    <th:block th:each="i: ${#numbers.sequence(0, pages.number - 1) }">
+                        <li class="active">
+                            <span th:if="${pages.totalPages == i}" class="selected">[[${i}+1]]</span>
+                            <span th:unless="${pages.totalPages == i}">
+                                <a th:href="@{/home(page=${i},size=${pages.size})}">[[${i}+1]]</a>
+							</span>
+                        </li>
+                    </th:block>
+                    <li>
+                        <span th:if="${pages.isFirst()}">
+                            <a th:href="@{/home(page=${pages.page +1},size=${pages.size})}">&gt;</a>
+						</span>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<hr>
+<th:block th:include="layout/web-footer"/>
+<script>
+    $(document).ready(function () {
+        $('.add').click(function (event) {
+            event.preventDefault();
+            var productId = $(this).attr("data-id");
+            $.ajax({
+                url: "/cart/buycart",
+                type: "GET",
+                data: {
+                    id: productId,
+                },
+                success: function (value) {
+                    $('.sizeCart').html("[" + value + "]");
+                }
+            })
+        });
+    });
+</script>
+</body>
+</html>

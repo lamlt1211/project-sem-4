@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en-US" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>User Management</title>
+    <th:block layout:fragment="headerfiles">
+        <!-- Toastr -->
+        <link rel="stylesheet" th:href="@{/LTE/plugins/toastr/toastr.min.css}"/>
+    </th:block>
+</head>
+<body>
+<!-- Content Wrapper. Contains page content -->
+<div layout:fragment="content" class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Customer Management</h1>
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a th:href="@{/home}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">User Management</li>
+                    </ol>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Main row -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">LIST CUSTOMER</h3>
+                            <button type="button"
+                                    class="btn btn-xs btn-block btn-warning" data-toggle="modal"
+                                    data-target="#modal-warning"
+                                    style="width: 100px; text-transform: uppercase; float: left; margin-left: 15px;"
+                                    th:styleappend="${errors == null} ? 'display: none;' : 'display:block;'">
+                                <i class="fas fa-bell"></i>&nbsp;&nbsp;Error Found
+                            </button>
+                            <div class="card-tools">
+                                <form method="POST" th:action="@{/users}">
+                                    <div class="input-group input-group-sm" style="width: 150px;">
+                                        <input type="text" name="table_search" id="searchValue"
+                                               th:value="*{searchValue}" class="form-control float-right"
+                                               placeholder="Search">
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-default">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table class="table table-bordered table-hover table-striped"
+                                   style="text-align: center">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>User Name</th>
+                                    <th>Full Name</th>
+                                    <th>Email</th>
+                                    <th>Address</th>
+                                    <th>Phone</th>
+                                    <th>Created At</th>
+                                    <th>Updated At</th>
+                                    <th>Action</th>
+                                    <th>Blocked</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="user : ${data}">
+                                    <td th:text="${user.id}"/>
+                                    <td th:text="${user.userName}"/>
+                                    <td th:text="${user.fullName}"/>
+                                    <td th:text="${user.email}"/>
+                                    <td th:text="${user.address}"/>
+                                    <td th:text="${user.phone}"/>
+                                    <td
+                                            th:text="${#dates.format(user.createdAt, 'dd/MM/yyyy hh:mm a')}"/>
+                                    <td
+                                            th:text="${#dates.format(user.updatedAt, 'dd/MM/yyyy hh:mm a')}"/>
+                                    <td class="project-actions text-right">
+                                        <a class="btn btn-primary btn-sm"
+                                           th:href="@{/users/{id}(id=${user.id})}"> <i
+                                                class="fas fa-eye"></i>&nbsp;&nbsp;View</a>
+                                    </td>
+                                    <td>
+                                        <button type="button"
+                                                class="btn btn-xs btn-block btn-success" data-toggle="modal"
+                                                data-target="#modal-danger"
+                                                th:attr="data-id=${user.id}"
+                                                style="width: 100px; margin: auto;"
+                                                th:if="${user.status > 0}">
+                                            <i class="fas fa-lock"></i>&nbsp;&nbsp;BLOCK
+                                        </button>
+                                        <button type="button"
+                                                class="btn btn-xs btn-block btn-danger"
+                                                data-toggle="modal" data-target="#modal-success"
+                                                th:attr="data-id=${user.id}"
+                                                style="width: 100px; margin: auto;"
+                                                th:unless="${user.status > 0}">
+                                            <i class="fas fa-unlock"></i>&nbsp;&nbsp;UNBLOCK
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer clearfix">
+                            <ul th:if="${data.totalPages > 0}"
+                                class="pagination pagination-sm m-0 float-right">
+                                <li class="page-item" th:classappend="${currentPage}>0?'':'disabled'"><a
+                                        class="page-link"
+                                        th:with="preIndex=${currentPage - 1}"
+                                        th:href="@{/users(searchValue=${searchValue},pageNo=${preIndex}<0?0:${preIndex})}">&laquo;</a>
+                                </li>
+                                <li class="page-item"
+                                    th:each="i : ${#numbers.sequence(0, data.totalPages-1)}"
+                                    th:classappend="${currentPage}==${i}?'active':''"><a
+                                        class="page-link" th:with="currentIndex=${i+1}"
+                                        th:text="${currentIndex}"
+                                        th:href="@{/users(searchValue=${searchValue},pageNo=${i})}"></a>
+                                </li>
+                                <li class="page-item"
+                                    th:classappend="${currentPage}<${data.totalPages}-1?'':'disabled'"><a
+                                        class="page-link"
+                                        th:with="postIndex=${currentPage + 1}"
+                                        th:href="@{/users(searchValue=${searchValue},pageNo=${postIndex}>=${data.totalPages}?(${data.totalPages-1}):${postIndex})}">&raquo;</a>
+                                </li>
+                            </ul>
+                            <ul th:unless="${data.totalPages > 0}"
+                                class="pagination pagination-sm m-0 float-right">
+                                <li class="page-item" th:classappend="disabled">
+                                    <a class="page-link" th:with="preIndex=${currentPage - 1}" href="#">&laquo;</a>
+                                </li>
+                                <li class="page-item" th:classappend="'active'">
+                                    <a class="page-link" th:text="1"
+                                       th:href="@{/users(searchValue=${searchValue},pageNo=${i})}"></a>
+                                </li>
+                                <li class="page-item" th:classappend="disabled">
+                                    <a class="page-link" th:with="postIndex=${currentPage + 1}" href="#">&raquo;</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row (main row) -->
+        </div>
+        <!-- /.container-fluid -->
+
+        <div class="modal fade" id="modal-danger">
+            <div class="modal-dialog">
+                <div class="modal-content bg-danger">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Danger Modal</h4>
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to block this customer?</p>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <form id="lockForm" action="#" method="POST">
+                            <input type="hidden" name="block-id"/>
+                            <button type="submit" class="btn btn-outline-light">Save
+                                changes
+                            </button>
+                        </form>
+                        <button type="button" class="btn btn-outline-light"
+                                data-dismiss="modal">Close
+                        </button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
+        <div class="modal fade" id="modal-success">
+            <div class="modal-dialog">
+                <div class="modal-content bg-success">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Success Modal</h4>
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to unblock this customer?</p>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <form id="unlockForm" action="#" method="POST">
+                            <input type="hidden" name="unblock-id"/>
+                            <button type="submit" class="btn btn-outline-light">Save
+                                changes
+                            </button>
+                        </form>
+                        <button type="button" class="btn btn-outline-light"
+                                data-dismiss="modal">Close
+                        </button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
+        <div class="modal fade" id="modal-warning">
+            <div class="modal-dialog">
+                <div class="modal-content bg-warning">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Success Modal</h4>
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" th:each="error, iterator:${errors}">
+                        <p style="color: red" th:text="${iterator.index} + '. ' + ${error}"></p>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-outline-light"
+                                data-dismiss="modal">Close
+                        </button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+<th:block layout:fragment="script">
+    <!-- Toastr -->
+    <script th:src="@{/LTE/plugins/toastr/toastr.min.js}"></script>
+    <script>
+        $(function () {
+            $('#modal-danger').on('show.bs.modal', function (event) {
+                let button = $(event.relatedTarget);
+                let id = button.data('id');
+                let searchValue = $('#searchValue').val();
+                let url = "users/user/toggle-block?searchValue=" + searchValue + "&id=" + id + "&status=0";
+                $('#lockForm').attr('action', url);
+            });
+
+            $('#modal-success').on('show.bs.modal', function (event) {
+                let button = $(event.relatedTarget);
+                let id = button.data('id');
+                let searchValue = $('#searchValue').val();
+                let url = "users/user/toggle-block?searchValue=" + searchValue + "&id=" + id + "&status=1";
+                $('#unlockForm').attr('action', url);
+            });
+        });
+    </script>
+</th:block>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Test Page</title>
+    <th:block layout:fragment="headerfiles">
+        <!-- Toastr -->
+        <link rel="stylesheet" th:href="@{/LTE/plugins/toastr/toastr.min.css}"/>
+    </th:block>
+</head>
+<body>
+<!-- Content Wrapper. Contains page content -->
+<div layout:fragment="content" class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Category Management</h1>
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a th:href="@{/home}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Category Management</li>
+                    </ol>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Main row -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <a href="/categories/create" class="btn btn-primary"> <i
+                                    class="fas fa-user-plus ml-2" data-target=".create-account">Create</i>
+                            </a>
+                            <div class="dropdown show">
+                            </div>
+                            <div class="card-tools">
+                                <form method="POST" th:action="@{/categories}">
+                                    <div class="input-group input-group-sm" style="width: 150px;">
+                                        <input type="text" name="table_search" id="searchValue"
+                                               th:value="*{searchValue}" class="form-control float-right"
+                                               placeholder="Search">
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-default">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered table-hover table-striped"
+                                   style="text-align: center">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Created at</th>
+                                    <th>Updated at</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!--/*@thymesVar id="data" type=""*/-->
+                                <tr th:each="category : ${data}">
+                                    <td th:text="${category.id}"></td>
+                                    <td th:text="${category.name}"></td>
+                                    <td th:text="${category.description}"></td>
+                                    <td th:text="${#dates.format(category.createdAt, 'dd/MM/yyyy hh:mm a')}"/>
+                                    <td th:text="${#dates.format(category.updatedAt, 'dd/MM/yyyy hh:mm a')}"/>
+                                    <td>
+                                        <a class="btn btn-xs btn-success"
+                                           th:href="@{/categories/delete/{id}(id=${category.id})}"
+                                           style="width: 100px; margin: auto;" th:if="${category.status > 0}">
+                                            <i class="fas fa-unlock"></i>&nbsp;&nbsp;ACTIVE
+                                        </a>
+                                        <a class="btn btn-xs  btn-danger"
+                                           th:href="@{/categories/delete/{id}(id=${category.id})}"
+                                           style="width: 100px; margin: auto;"
+                                           th:unless="${category.status > 0}">
+                                            <i class="fas fa-lock"></i>&nbsp;&nbsp;UNACTIVE
+                                        </a>
+                                    </td>
+                                    <td class="project-actions text-center">
+                                        <a class="btn btn-primary btn-sm"
+                                           th:href="@{/categories/{id}(id=${category.id})}">
+                                            <i class="fas fa-eye">&nbsp;&nbsp;View</i>
+                                        </a>
+                                        <a class="btn btn btn-danger btn-sm"
+                                           th:href="@{/categories/edit/{id}(id=${category.id})}">
+                                            <i class="fas fa-pencil-alt">&nbsp;&nbsp;Edit</i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer clearfix">
+                            <ul th:if="${data.totalPages > 0}"
+                                class="pagination pagination-sm m-0 float-right">
+                                <li class="page-item" th:classappend="${currentPage}>0?'':'disabled'">
+                                    <a class="page-link" th:with="preIndex=${currentPage - 1}"
+                                       th:href="@{/categories/(searchValue=${searchValue},pageNo=${preIndex}<0?0:${preIndex})}">&laquo;
+                                    </a>
+                                </li>
+                                <li class="page-item" th:each="i : ${#numbers.sequence(0, data.totalPages-1)}"
+                                    th:classappend="${currentPage}==${i}?'active':''">
+                                    <a class="page-link" th:with="currentIndex=${i+1}"
+                                       th:text="${currentIndex}"
+                                       th:href="@{/categories/(searchValue=${searchValue},pageNo=${i})}">
+                                    </a>
+                                </li>
+                                <li class="page-item"
+                                    th:classappend="${currentPage}<${data.totalPages}-1?'':'disabled'">
+                                    <a class="page-link" th:with="postIndex=${currentPage + 1}"
+                                       th:href="@{/categories/(searchValue=${searchValue},pageNo=${postIndex}>=${data.totalPages}?(${data.totalPages-1}):${postIndex})}">&raquo;
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul th:unless="${data.totalPages > 0}" class="pagination pagination-sm m-0 float-right">
+                                <li class="page-item" th:classappend="disabled">
+                                    <a class="page-link" th:with="preIndex=${currentPage - 1}" href="#">&laquo;
+                                    </a>
+                                </li>
+                                <li class="page-item" th:classappend="'active'">
+                                    <a class="page-link" th:text="1"
+                                       th:href="@{/categories/(searchValue=${searchValue},pageNo=${i})}">
+                                    </a>
+                                </li>
+                                <li class="page-item" th:classappend="disabled">
+                                    <a class="page-link" th:with="postIndex=${currentPage + 1}"
+                                       href="#">&raquo;
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="modal fade create-account" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle1">Add Category</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Name:</label>
+                                            <div class="poup">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Description</label>
+                                            <input class="form-control col-sm-9" id="account_number" type="text">
+                                        </div>
+                                        <!--Trạng thái-->
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Trạng thái:</label>
+                                            <div class="col-sm-9">
+                                                <div class="switchToggle">
+                                                    <input type="checkbox" id="status"/>
+                                                    <label for="status"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng
+                                        </button>
+                                        <button type="button" class="btn btn-primary save-add-account">Lưu
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+            <!-- /.row (main row) -->
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+<th:block layout:fragment="script">
+    <!-- Toastr -->
+    <script th:src="@{/LTE/plugins/toastr/toastr.min.js}"></script>
+    <script>
+        // var urlPage = window.location.href.split("=")[2]
+        // console.log(urlPage);
+        function activeCate() {
+            id = $('#cateActive').val()
+        };
+
+        $(function () {
+            $('#modal-danger').on('show.bs.modal', function (event) {
+                let button = $(event.relatedTarget);
+                let id = button.data('id');
+                let searchValue = $('#searchValue').val();
+                let urlPage = window.location.href.split("=")[2]
+                //let pageNo = $('#pageNo').val();
+                let url = "/categories/delete?searchValue=" + searchValue + "&pageNo=" + urlPage + "&id=" + id;
+                $('#lockForm').attr('action', url);
+            });
+
+            $('#modal-success').on('show.bs.modal', function (event) {
+                let button = $(event.relatedTarget);
+                let id = button.data('id');
+                let searchValue = $('#searchValue').val();
+                let urlPage = window.location.href.split("=")[2]
+                let url = "/categories/delete?searchValue=" + searchValue + "&pageNo=" + urlPage + "&id=" + id;
+                $('#unlockForm').attr('action', url);
+            });
+        });
+    </script>
+</th:block>
+
+</body>
+</html>

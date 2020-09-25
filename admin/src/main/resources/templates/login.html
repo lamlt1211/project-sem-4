@@ -1,0 +1,41 @@
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Login Page</title>
+    <meta http-equiv="Content-Type"
+          content="application/json; charset=utf-8"/>
+    <link rel="stylesheet"
+          th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css}">
+    <link rel="stylesheet"
+          th:href="@{https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}"/>
+    <link href="../static/css/login-page.css"
+          th:href="@{/css/login-page.css}" rel="stylesheet"/>
+    <script
+            th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js}"></script>
+    <script
+            th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js}"></script>
+</head>
+<body>
+<div th:fragment="content">
+    <div class="login">
+        <h1>Login</h1>
+        <p th:if="${param.error}" class="message-field">Invalid account
+            or password</p>
+        <p th:if="${param.logout}" class="message-field">You have been
+            logged out</p>
+        <form th:action="@{/login-process}" method="POST">
+            <div class="inputWithIcon">
+                <input type="text" name="username" placeholder="Your username">
+                <i class="fa fa-user fa-lg fa-fw" aria-hidden="true"></i>
+            </div>
+
+            <div class="inputWithIcon">
+                <input type="password" name="password" placeholder="Your password">
+                <i class="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i>
+            </div>
+            <input class="btn btn-primary btn-block btn-large" type="submit"
+                   value="Login">
+        </form>
+    </div>
+</div>
+</body>
+</html>

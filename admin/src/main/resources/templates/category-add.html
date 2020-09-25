@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Test Page</title>
+    <th:block layout:fragment="headerfiles"></th:block>
+</head>
+
+<body>
+<!-- Content Wrapper. Contains page content -->
+<div layout:fragment="content" class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Add new category</h1>
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/home}">Dashboard</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/categories}">Category Management</a>
+                        </li>
+                        <li class="breadcrumb-item active">Add Category</li>
+                    </ol>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+        <!-- Main row -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Add Category</h3>
+                    </div>
+                    <form method="POST" th:action="@{/categories/create}" th:object="${categoryDTO}">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" class="form-control" th:field="*{name}">
+                                <span th:if="${#fields.hasErrors('name')}" style="color: red" th:errors="*{name}">Name Error</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea id="description" th:field="*{description}" class="form-control"
+                                          rows="4"></textarea>
+                                <span th:if="${#fields.hasErrors('description')}" style="color: red"
+                                      th:errors="*{description}">Description Error</span>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <a href="/categories" class="btn btn-secondary float-left">Cancel</a>
+                            <input type="submit" value="Confirm" class="btn btn-success float-left"
+                                   style="margin-left: 20px">
+                        </div>
+                    </form>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+        <!-- /.row (main row) -->
+
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+<th:block layout:fragment="script">
+
+</th:block>
+
+</body>
+
+</html>

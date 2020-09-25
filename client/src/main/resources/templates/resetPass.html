@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" th:href="@{/Login_v18/images/icons/favicon.ico}"/>
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" th:href="@{/Login_v18/vendor/bootstrap/css/bootstrap.min.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" th:href="@{/Login_v18/fonts/font-awesome-4.7.0/css/font-awesome.min.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" th:href="@{/Login_v18/fonts/Linearicons-Free-v1.0.0/icon-font.min.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" th:href="@{/Login_v18/vendor/animate/animate.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" th:href="@{/Login_v18/vendor/css-hamburgers/hamburgers.min.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" th:href="@{/Login_v18/vendor/animsition/css/animsition.min.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" th:href="@{/Login_v18/vendor/select2/select2.min.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" th:href="@{/Login_v18/vendor/daterangepicker/daterangepicker.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" th:href="@{/Login_v18/css/util.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/Login_v18/css/main.css}">
+    <!--===============================================================================================-->
+
+</head>
+<body style="background-color: #666666;">
+
+<div class="limiter">
+    <div class="container-login100">
+        <div class="wrap-login100">
+            <form class="login100-form validate-form" th:action="@{/resetPass}" method="POST">
+                <p id="emailError" th:text="${message != null} ? ${message} : ''"></p>
+                <span class="login100-form-title p-b-43"> Quên mật khẩu
+                    <div class="wrap-input100 validate-input"
+                         data-validate="FullName is required">
+                        <input class="input100" type="email" name="email" placeholder="Enter your email here" required>
+                        <span class="focus-input100"></span>
+                    </div>
+                        <button type="submit" class="login100-form-btn">RESET PASSWORD
+                    </button>
+                </span>
+                <p>
+                    Don't have an Account? <a th:href="@{/signup}"> Sign Up Now!</a>
+                </p>
+            </form>
+
+
+            <div class="login100-more" th:style="'background-image:url('+ @{images/bg_3.jpg} +');'"></div>
+        </div>
+    </div>
+</div>
+
+<!--===============================================================================================-->
+<script th:src="@{/Login_v18/vendor/jquery/jquery-3.2.1.min.js}"></script>
+<!--===============================================================================================-->
+<script th:src="@{/Login_v18/vendor/animsition/js/animsition.min.js}"></script>
+<!--===============================================================================================-->
+<script th:src="@{/Login_v18/vendor/bootstrap/js/popper.js}"></script>
+<script th:src="@{/Login_v18/vendor/bootstrap/js/bootstrap.min.js}"></script>
+<!--===============================================================================================-->
+<script th:src="@{/Login_v18/vendor/select2/select2.min.js}"></script>
+<!--===============================================================================================-->
+<script th:src="@{/Login_v18/vendor/daterangepicker/moment.min.js}"></script>
+<script th:src="@{/Login_v18/vendor/daterangepicker/daterangepicker.js}"></script>
+<!--===============================================================================================-->
+<script th:src="@{/Login_v18/vendor/countdowntime/countdowntime.js}"></script>
+<!--===============================================================================================-->
+<script th:src="@{/Login_v18/js/main.js}"></script>
+
+</body>
+</html>
