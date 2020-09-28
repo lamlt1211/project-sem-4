@@ -57,8 +57,8 @@ public class LoginController {
     // dang nhap
     @GetMapping("login")
     public String getLoginPage(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication(); // check xem co dung quyen admin hay k
-        if (!auth.getPrincipal().toString().equals("anonymousUser"))
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // check xem co dung quyen admin hay k
+        if (!authentication.getPrincipal().toString().equals("anonymousUser"))
             return "redirect:/home";
         return "login";
     }

@@ -34,7 +34,5 @@ public interface ProductService {
 
     List<ProductDTO> getProductByCategoryId(Long id);
 
-    List<ProductDTO> getProductByCategoryName(String name);
-
     Long countProduct();
 }

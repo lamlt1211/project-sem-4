@@ -140,22 +140,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> getProductByCategoryName(String name) {
-        List<Product> listProduct = productRepository.getProductByCategoriesName(name);
-        List<ProductDTO> listProductDTO = new ArrayList<>();
-        listProduct.forEach(p -> {
-            ProductDTO productDTO = new ProductDTO();
-            productDTO.setId(p.getId());
-            productDTO.setName(p.getName());
-            productDTO.setDescription(p.getDescription());
-            productDTO.setImage(p.getImage());
-            productDTO.setPrice(p.getPrice());
-            listProductDTO.add(productDTO);
-        });
-        return listProductDTO;
-    }
-
-    @Override
     public Long countProduct() {
         return productRepository.count();
     }

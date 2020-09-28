@@ -51,8 +51,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/login-process")
                 .defaultSuccessUrl("/home") // link đến home khi login success
                 .failureUrl("/login?error") // fail
-                .usernameParameter("username")
-                .passwordParameter("password")
+                .usernameParameter("username") // enter username
+                .passwordParameter("password") // enter password
                 .and().logout().permitAll()
                 .logoutUrl("/logout")
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))

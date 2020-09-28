@@ -2,7 +2,6 @@ package com.bkap.controller;
 
 import com.bkap.dto.APIResponse;
 import com.bkap.dto.CategoryDTO;
-import com.bkap.dto.ProductDTO;
 import com.bkap.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

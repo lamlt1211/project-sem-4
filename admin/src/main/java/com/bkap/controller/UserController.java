@@ -41,9 +41,6 @@ public class UserController {
     @Autowired
     private RestService restService;
 
-    @Autowired
-    private JWTUtil jwtUtil;
-
     @GetMapping
     public String getListAllUserPage(Model model,
                                      @RequestParam(defaultValue = "", required = false) String searchValue,
@@ -86,7 +83,6 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String detail(@PathVariable("id") Integer id, Model model) { // dùng để hiển thị chi tiết user
-        String authToken = jwtUtil.getJwtTokenFromSecurityContext();
         HttpHeaders header = new HttpHeaders();
         UserDTO userDTO = restService.execute(
                 url + usersUrl + "/" + id,
@@ -101,14 +97,12 @@ public class UserController {
         return "users-detail";
     }
 
-    @PostMapping("/user/toggle-block") // thay doi status user in admin
+    @PostMapping("/user/toggle-block") //change status user in admin
     public String changeUserStatus(
             @RequestParam(defaultValue = "", required = false) String searchValue,
             @RequestParam Integer id,
             @RequestParam Integer status) {
-        String authToken = jwtUtil.getJwtTokenFromSecurityContext();
         HttpHeaders header = new HttpHeaders();
-        header.setBearerAuth(authToken);
         Map<String, Object> values = new HashMap<>();
         values.put("id", id);
         values.put("status", status);

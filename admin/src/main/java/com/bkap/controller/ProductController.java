@@ -112,11 +112,8 @@ public class ProductController {
             System.out.println(result.getAllErrors());
             return "products-add";
         }
-        String authToken = jwtUtil.getJwtTokenFromSecurityContext();
         HttpHeaders header = new HttpHeaders();
-        header.setBearerAuth(authToken);
         header.setContentType(MediaType.APPLICATION_JSON);
-
         APIResponse response = restService.execute(
                 url + productUrl,
                 HttpMethod.POST,
@@ -133,7 +130,6 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public String detail(@PathVariable("id") Integer id, Model model) { // show product details
-        String authToken = jwtUtil.getJwtTokenFromSecurityContext();
         HttpHeaders header = new HttpHeaders();
         ProductDTO productDTO = restService.execute(
                 url + productUrl + "/" + id,
@@ -150,9 +146,7 @@ public class ProductController {
 
     @GetMapping("edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model) { // khi click vào nút sửa , hàm này thực hiện show lên dữ liệu đã có
-        String authToken = jwtUtil.getJwtTokenFromSecurityContext();
         HttpHeaders header = new HttpHeaders();
-        header.setBearerAuth(authToken);
         if (id == null) {
             return "Error";
         }
@@ -176,10 +170,8 @@ public class ProductController {
     }
 
     @PostMapping("edit/{id}")
-    public String edit(@ModelAttribute("product") ProductDTO productDTO, @PathVariable("id") Integer id) {
-        String authToken = jwtUtil.getJwtTokenFromSecurityContext(); // hàm này dùng để xử lý , khi edit
+    public String edit(@ModelAttribute("product") ProductDTO productDTO, @PathVariable("id") Integer id) {// hàm này dùng để xử lý , khi edit
         HttpHeaders header = new HttpHeaders();
-        header.setBearerAuth(authToken);
         header.setContentType(MediaType.APPLICATION_JSON);
         restService.execute(
                 url + productUrl + "/" + id,
@@ -193,9 +185,7 @@ public class ProductController {
 
     @GetMapping("delete/{id}")
     public String delete(@PathVariable("id") Long id) {
-        String authToken = jwtUtil.getJwtTokenFromSecurityContext();
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(authToken);
         headers.setContentType(MediaType.APPLICATION_JSON);
         try {
             restService.execute(

@@ -3,7 +3,6 @@ package com.bkap.services.impl;
 import com.bkap.convert.CategoryConvert;
 import com.bkap.dto.CategoryDTO;
 import com.bkap.entity.Category;
-import com.bkap.exceptions.DuplicateException;
 import com.bkap.exceptions.NotFoundException;
 import com.bkap.repositories.CategoryRepository;
 import com.bkap.services.CategoryService;

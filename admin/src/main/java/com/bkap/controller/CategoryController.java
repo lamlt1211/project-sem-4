@@ -94,7 +94,6 @@ public class CategoryController {
     // detail category
     @GetMapping("/{id}")
     public String detail(@PathVariable("id") Integer categoryId, Model model) {
-        String authToken = jwtUtil.getJwtTokenFromSecurityContext();
         HttpHeaders header = new HttpHeaders();
         CategoryDTO categoryDTO = restService.execute(
                 url + prefixCategoryUrl + "/" + categoryId,
@@ -121,11 +120,8 @@ public class CategoryController {
         if (result.hasErrors()) {
             return "category-add";
         }
-        String authToken = jwtUtil.getJwtTokenFromSecurityContext();
         HttpHeaders header = new HttpHeaders();
-        header.setBearerAuth(authToken);
         header.setContentType(MediaType.APPLICATION_JSON);
-
         APIResponse response = restService.execute(
                 url + prefixCategoryUrl,
                 HttpMethod.POST,
@@ -143,9 +139,7 @@ public class CategoryController {
 
     @GetMapping("edit/{id}")
     public String edit(@PathVariable("id") Integer categoryId, Model model) {
-        String authToken = jwtUtil.getJwtTokenFromSecurityContext();
         HttpHeaders header = new HttpHeaders();
-        header.setBearerAuth(authToken);
         if (categoryId == null) {
             return "Error";
         }
@@ -162,9 +156,7 @@ public class CategoryController {
 
     @PostMapping("edit/{id}")
     public String edit(@ModelAttribute("category") CategoryDTO categoryRequest, @PathVariable("id") Integer categoryId) {
-        String authToken = jwtUtil.getJwtTokenFromSecurityContext();
         HttpHeaders header = new HttpHeaders();
-        header.setBearerAuth(authToken);
         header.setContentType(MediaType.APPLICATION_JSON);
         restService.execute(
                 url + prefixCategoryUrl + "/" + categoryId,
@@ -178,9 +170,7 @@ public class CategoryController {
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Integer id) {
-        String authToken = jwtUtil.getJwtTokenFromSecurityContext();
         HttpHeaders header = new HttpHeaders();
-        header.setBearerAuth(authToken);
         Map<String, Object> values = new HashMap<>();
         values.put("id", id);
         restService.execute(
